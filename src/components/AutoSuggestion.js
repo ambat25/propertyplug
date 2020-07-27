@@ -18,9 +18,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function GoogleMaps(props) {
+export default function GoogleMaps({ onLocationChange, selectedLocation}) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(null);
   const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState([]);
 
@@ -43,7 +42,7 @@ export default function GoogleMaps(props) {
     }
 
     if (inputValue === '') {
-      setOptions(value ? [value] : []);
+      setOptions(selectedLocation ? [selectedLocation] : []);
       return undefined;
     }
 
@@ -51,8 +50,8 @@ export default function GoogleMaps(props) {
       if (active) {
         let newOptions = [];
 
-        if (value) {
-          newOptions = [value];
+        if (selectedLocation) {
+          newOptions = [selectedLocation];
         }
 
         if (results) {
@@ -66,7 +65,7 @@ export default function GoogleMaps(props) {
     return () => {
       active = false;
     };
-  }, [value, inputValue, fetch]);
+  }, [selectedLocation, inputValue, fetch]);
 
   return (
     <Autocomplete
@@ -79,17 +78,16 @@ export default function GoogleMaps(props) {
       freeSolo
       includeInputInList
       filterSelectedOptions
-      value={value}
+      value={selectedLocation}
       onChange={(_, newValue) => {
         setOptions(newValue ? [newValue, ...options] : options);
-        props.onLocationChange(newValue)
-        setValue(newValue);
+        onLocationChange(newValue)
       }}
       onInputChange={(_, newInputValue) => {
         setInputValue(newInputValue);
       }}
       renderInput={(params) => (
-        <TextField {...params} style={{ border: 'none' }} placeholder="Enter Your Search location"  variant="outlined" fullWidth />
+        <TextField {...params} placeholder="Enter Your Search location"  variant="outlined" fullWidth />
       )}
       renderOption={(option) => {
         const matches = option.structured_formatting.main_text_matched_substrings;

@@ -3,34 +3,18 @@ import Listings from "./containers/Listings";
 import Home from "./containers/Home";
 import './App.css';
 import {
-  getGeocodeByPlaceId,
+  defaultAdminLevelData,
   fetchMashvisor,
+  fetchRealtyMole,
   fetchRealtor,
-  fetchRealtyMole
+  getGeocodeByPlaceId,
+  loadScript,
 } from './utils';
 
-function loadScript(src, position, id) {
-  if (!position) {
-    return;
-  }
-  const script = document.createElement('script');
-  script.setAttribute('async', '');
-  script.setAttribute('id', id);
-  script.src = src;
-  position.appendChild(script);
-}
-
-const defaultAdminLevelData = {
-  state: '',
-  city: '',
-  address: '',
-  address2: '',
-  fullAddress: '',
-  page: 1,
-}
 
 function App() {
-  const [location, setLocation] = useState({});
+  const [location, setLocation] = useState(null);
+  const [fetchingData, setFetchingData] = useState(false);
   const [adminLevelData, setAdminLevelData] = useState({ ...defaultAdminLevelData });
   const [properties, setProperties] = useState([])
 
@@ -69,8 +53,9 @@ function App() {
   const fetchProperties = async () => {
     if (adminLevelData.state) {
       try {
+        setFetchingData(true);
         const requests = [fetchRealtor(adminLevelData), fetchMashvisor(adminLevelData), fetchRealtyMole(adminLevelData)]
-        Promise.allSettled(requests).then((propertiesGroup) => {
+        await Promise.allSettled(requests).then((propertiesGroup) => {
           let fetchedProperties = [];
           propertiesGroup
             .forEach(({ status, value }) => {
@@ -80,8 +65,10 @@ function App() {
             })
           setProperties([...properties, ...fetchedProperties])
         })
+        setFetchingData(false);
       } catch (error) {
         // handle Catch
+        setFetchingData(false);
       }
     }
   }
@@ -98,9 +85,15 @@ function App() {
     <div className="App">
       {
         adminLevelData.state ? (
-          <Listings properties={properties} onLocationChange={setLocation} onLoadMore={handleLoadMore} />
+          <Listings
+            fetching={fetchingData}
+            onLoadMore={handleLoadMore}
+            onLocationChange={setLocation}
+            properties={properties}
+            selectedLocation={location}
+          />
         ) : (
-            <Home onLocationChange={setLocation} />
+            <Home onLocationChange={setLocation} selectedLocation={location} />
           )
       }
     </div>

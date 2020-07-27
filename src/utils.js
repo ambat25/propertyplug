@@ -18,9 +18,9 @@ export const parseMashvisorResponse = (response) => {
   const summary = { ...response.content, properties: undefined };
   const properties = response.content.properties.map(property => {
     const address = `
-    ${property.name}, 
-    ${property.airbnb_neighborhood}, 
-    ${property.airbnb_city}, 
+    ${property.name ? `${property.name}, `: ''}
+    ${property.airbnb_neighborhood ? `${property.airbnb_neighborhood}, `: ''}
+    ${property.airbnb_city ? `${property.airbnb_city}, `: ''}
     ${property.state} ${property.zip}
     `;
     return ({
@@ -35,7 +35,7 @@ export const parseMashvisorResponse = (response) => {
     monthlyPrice: property.monthly_price,
     nightPrice: property.night_price,
     rooms: property.num_of_rooms,
-    source: 'mashvisor',
+    source: 'Mashvisor',
     type: property.property_type,
     traditional: false,
     url: '',
@@ -51,10 +51,10 @@ export const parseRealtorResponse = (response) => {
   const properties = response.properties.map(property => ({
     active: property.listing_status === 'active',
     address: `
-    ${property.address.line}, 
-    ${property.address.neighborhood_name}, 
-    ${property.address.city}, 
-    ${property.address.state_code}, 
+    ${property.address.line ? `${property.address.line}, ` : ''}
+    ${property.address.neighborhood_name ? `${property.address.neighborhood_name}, ` : ''}
+    ${property.address.city ? `${property.address.city}, ` : ''}
+    ${property.address.state_code ? `${property.address.state_code}, ` : ''}
     ${property.address.postal_code}
     `,
     bathrooms: `${property?.community.baths_min} - ${property?.community.baths_max}`,
@@ -64,7 +64,7 @@ export const parseRealtorResponse = (response) => {
     lat: property.address.lat,
     lon: property.address.lon,
     price: `${property.community.price_min} - ${property.community.price_max}`,
-    source: 'realtor',
+    source: 'Realtor',
     type: property.prop_type,
     traditional: true,
     website: 'https://www.realtor.com/',
@@ -83,7 +83,7 @@ export const parseRealtyMoleResponse = (response) => {
     lat: property.latitude,
     lon: property.longitude,
     rooms: property.bedrooms,
-    source: 'realty mole',
+    source: 'Realty Mole',
     type: property.propertyType,
     traditional: true,
     website: 'https://www.realtymole.com/'
@@ -176,3 +176,25 @@ export const fetchMashvisor = async ({ city, state, page=1 }) => {
     return parseMashvisorResponse(response.data).properties
   }
 }
+
+
+export const loadScript = (src, position, id) => {
+  if (!position) {
+    return;
+  }
+  const script = document.createElement('script');
+  script.setAttribute('async', '');
+  script.setAttribute('id', id);
+  script.src = src;
+  position.appendChild(script);
+}
+
+export const defaultAdminLevelData = {
+  state: '',
+  city: '',
+  address: '',
+  address2: '',
+  fullAddress: '',
+  page: 1,
+}
+
