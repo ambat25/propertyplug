@@ -1,6 +1,5 @@
 import React from 'react';
 import { Grid, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Search from '../components/Search'
@@ -11,7 +10,7 @@ export default function Listings({ onLoadMore, onLocationChange, properties, fet
     <Grid container>
       <Grid container style={{ minHeight: 200, height: '15vh' }}>
         <Grid item xs={12} >
-          <h1 style={{ color: 'red' }}>Property Plug</h1>
+          <h1 style={{ color: 'red' }}><a className="links" href="/">Property Plug</a></h1>
           <div style={{ width: 700, marginLeft: 'auto', marginRight: 'auto' }}>
             <Search onLocationChange={onLocationChange} selectedLocation={selectedLocation} />
           </div>
@@ -25,7 +24,7 @@ export default function Listings({ onLoadMore, onLocationChange, properties, fet
           <div style={{ margin: 10 }}>
             {
               fetching ? <CircularProgress style={{ color: 'red' }} /> : (
-                <Button color="primary" onClick={onLoadMore}>Load More</Button>
+                <Button style={{ color: 'red' }} onClick={onLoadMore}>Load More</Button>
               )
             }
           </div>
