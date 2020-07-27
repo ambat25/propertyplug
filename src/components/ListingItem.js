@@ -2,8 +2,6 @@ import React from 'react'
 
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import BedIcon from '@material-ui/icons/KingBedOutlined';
-import MoneyOutlinedIcon from '@material-ui/icons/MoneyOutlined';
 
 import placeholder from '../assets/placeholder.jpg';
 
@@ -32,16 +30,6 @@ const ItemInfo = ({ info, Icon, title, size }) => (
     : null
 )
 
-const ItemInfoImportant = ({ info, Icon, title, size }) => (
-  info ?
-    <Grid item xs={12}>
-      <span style={{ fontSize: '1.4em' }}>
-        {Icon && <Icon fontSize="large" />} {title}: &nbsp; {info}
-        </span>
-    </Grid>
-    : null
-)
-
 export default function ListingItem({ property }) {
   const classes = useStyles();
 
@@ -56,13 +44,11 @@ export default function ListingItem({ property }) {
           spacing={1}
           style={{ textAlign: 'left', padding: 10 }}
         >
-            <ItemInfoImportant
-              Icon={BedIcon}
+            <ItemInfo
               info={property.beds}
               title='Beds'
             />
-            <ItemInfoImportant
-              Icon={MoneyOutlinedIcon}
+            <ItemInfo
               info={property.price}
               title='Price'
             />
