@@ -26,7 +26,7 @@ export default function GoogleMaps({ onLocationChange, selectedLocation}) {
   const fetch = React.useMemo(
     () =>
       throttle((request, callback) => {
-        autocompleteService.current.getPlacePredictions({ ...request, types: ['establishment'], componentRestrictions: {country: 'us'} }, callback);
+        autocompleteService.current.getPlacePredictions({ ...request, componentRestrictions: {country: 'us'} }, callback);
       }, 200),
     [],
   );
