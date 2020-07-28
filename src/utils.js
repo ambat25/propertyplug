@@ -14,6 +14,27 @@ export const getGeocodeByPlaceId = placeId => {
   });
 };
 
+export const getAgencies = location => {
+  const map = document.querySelector('#google-maps');
+  const placeService = new window.google.maps.places.PlacesService(map);
+
+
+  return new Promise((resolve, reject) => {
+      placeService.nearbySearch({
+        location,
+        types: 'real_estate_agency',
+        radius: 1000,
+
+      }, (results, status) => {
+
+        if (status !== 'OK') {
+          reject(status);
+        }
+        resolve(results);
+      });
+    });
+};
+
 export const parseMashvisorResponse = (response) => {
   const summary = { ...response.content, properties: undefined };
   const properties = response.content.properties.map(property => {
