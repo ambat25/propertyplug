@@ -9,11 +9,12 @@ const useStyles = makeStyles((theme) => ({
   propertyImage: {
     objectFit: 'none',
     objectPosition: 'center',
-    width: 300,
+    width: 200,
     height: 280,
   },
   propertyImageContainer: {
     height: 300,
+    width: 200,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
